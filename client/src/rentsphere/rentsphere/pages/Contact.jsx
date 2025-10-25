@@ -1,0 +1,2 @@
+import React from 'react'
+export default function Contact(){ return (<div style={{maxWidth:720}}><h2>Contact</h2><p style={{color:'var(--muted)'}}>Have questions, need support, or want to list your property? We’re here to help.</p><p>Email: support@rentsphere.com</p></div>) }

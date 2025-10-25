@@ -1,0 +1,55 @@
+import React, { useEffect, useState } from "react";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
+import ListingCard from "../components/ListingCard";
+
+const OwnerDashboard = ({ ownerId }) => {
+    const [booked, setBooked] = useState([]);
+    useEffect(() => {
+        if (!ownerId) return;
+
+        // Listen for listings by the current owner
+        const q = query(collection(db, "listings"), where("ownerId", "==", ownerId));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const allListings =snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            setAvailable(allListings.filter((1) => 1.status === "available"));
+            setBooked(allListings.filter((1) => 1.status "booked"));
+        });
+
+        return unsubscribe;
+    }, [ownerId]);
+
+    return (
+        <div className="p-6">
+          <h1 ClassName="text-3xl font-bold text-blue-700 mb-6">&#127968;Owner Dashboard </h1>
+
+          <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-3 text-green-600"> Available Listings </h2>
+          {available.length > 0 ? (
+            <div ClassName="grid md:grid-cols-3 gap-4">
+            {available.map((listing) => (
+                <ListingCard key={listing.id} listing={listing} />
+            ))}
+            </div>
+        ) : (
+            <p className="text-grey-500">No available listings right now.</p>
+          )}
+          </section>
+
+          <section>
+             <h2 className="text-2xl font-semibold mb-3 text-red-600">Booked Listings</h2>
+             {booked.lenght > 0 ? (
+                <div className="grid md:grid-cols-3 gap-4">
+                {booked.map((listing) => (
+                    <ListingCard key={listing.id} listing={listing} />
+                ))}
+                </div>
+            ) : (
+                <p className="text-gray-500">No booked listings yet.</p>
+             )}
+             </section>
+             </div>
+    );
+} ;
+
+export default OwnerDashboard
